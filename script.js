@@ -2,12 +2,12 @@
  * NØRAN Assessoria Estratégica - Interactive Experience
  * Author: Frontend Team
  * Stack: Vanilla JS (ES6+)
- * * Funcionalidades:
- * - Smart Sticky Header (Glassmorphism effect)
+ * Funcionalidades:
+ * - Smart Sticky Header
  * - Mobile Navigation Controller
- * - Scroll Reveal Engine (Intersection Observer)
+ * - Scroll Reveal Engine
  * - Number Counter Animation
- * - Video Player Mockup
+ * - WhatsApp Form Integration (NOVO)
  */
 
 'use strict';
@@ -15,13 +15,15 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // =================================================================
-    // CONFIGURAÇÃO CENTRAL
+    // ⚙️ CONFIGURAÇÃO CENTRAL (EDITE SEU NÚMERO AQUI)
     // =================================================================
     const CONFIG = {
+        whatsappNumber: '5545998613142', // <--- COLOQUE SEU NÚMERO AQUI (Com 55 e DDD)
+        
         scrollThreshold: 50, // Ponto de ativação do header
-        animationOffset: '15%', // O elemento anima quando estiver 15% dentro da viewport
-        counterDuration: 2000, // Duração da animação dos números (ms)
-        staggerDelay: 100 // Delay entre itens de grid (ms)
+        animationOffset: '15%', // Trigger da animação
+        counterDuration: 2000, // Duração da animação dos números
+        staggerDelay: 100 // Delay entre itens de grid
     };
 
     // =================================================================
@@ -51,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================================
     const initMobileMenu = () => {
         const menuBtn = document.querySelector('.mobile-toggle');
-        const navList = document.querySelector('.nav-list');
+        const navList = document.querySelector('.nav-menu'); // Ajustado para .nav-menu
         const navLinks = document.querySelectorAll('.nav-link');
 
         if (!menuBtn || !navList) return;
@@ -121,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         revealElements.forEach(el => observer.observe(el));
 
         // Lógica de Stagger (Delay Escalonado) para Grids
-        // Adiciona delay via JS para não poluir o CSS
         staggerContainers.forEach(container => {
             const children = container.children;
             Array.from(children).forEach((child, index) => {
@@ -163,36 +164,46 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =================================================================
-    // 5. VÍDEO MOCKUP INTERATIVO
-    // Simula o player de vídeo
+    // 5. INTEGRAÇÃO WHATSAPP (Formulário)
+    // Captura os dados e envia formatado para o WhatsApp
     // =================================================================
-    const initVideoMockup = () => {
-        const playButtons = document.querySelectorAll('.video-play-btn');
+    const setupContactForm = () => {
+        const form = document.querySelector('#contact-form');
+        
+        if (!form) return;
 
-        playButtons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const card = btn.closest('.video-card'); // Busca o container pai
-                
-                // Feedback visual de clique
-                btn.style.transform = 'scale(0.9)';
-                setTimeout(() => btn.style.transform = 'scale(1)', 150);
+        form.addEventListener('submit', (e) => {
+            e.preventDefault(); // Impede o recarregamento da página
 
-                // Lógica de simulação
-                console.log(`%c ▶ Play Video: ${card ? card.dataset.title : 'Demo'}`, 'color: #e50914; font-weight: bold;');
-                
-                // Opção A: Alert simples (conforme pedido)
-                // alert('O vídeo seria carregado aqui.');
+            // Captura os dados dos campos
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('whatsapp').value;
+            const message = document.getElementById('message').value;
 
-                // Opção B (Mais elegante): Substituir por texto de "Carregando..."
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<span style="font-size: 0.8rem;">Carregando...</span>';
-                
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    alert('Neste mockup, o vídeo abriria em um modal ou player overlay.');
-                }, 800);
-            });
+            // Cria a mensagem formatada
+            const text = `
+*NOVA SOLICITAÇÃO - NØRAN* 🚀
+
+👤 *Nome:* ${name}
+📧 *Email:* ${email}
+📱 *WhatsApp:* ${phone}
+
+📝 *Descrição da Empresa:*
+${message}
+
+-----------------------------------
+_Enviado pelo site_
+            `.trim();
+
+            // Gera o link do WhatsApp
+            const url = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodeURIComponent(text)}`;
+            
+            // Abre o WhatsApp em nova aba
+            window.open(url, '_blank');
+
+            // Limpa o formulário (Opcional)
+            form.reset();
         });
     };
 
@@ -203,10 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
         initStickyHeader();
         initMobileMenu();
         initScrollReveal();
-        initVideoMockup();
+        setupContactForm(); // Inicia o formulário
         
-        // Log de status para debug
-        console.log('NØRAN UI Loaded | Creative Interaction Active');
+        console.log('NØRAN UI Loaded | System Online 🟢');
     };
 
     init();
