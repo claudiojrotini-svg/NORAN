@@ -519,12 +519,15 @@ p { margin-bottom: 1.5rem; font-weight: 300; }
     margin-bottom: 1rem;
 }
 
-/* --- SEÇÃO DE PLANOS --- */
+/* ==========================================================================
+   SEÇÃO DE PLANOS (CORRIGIDA)
+   ========================================================================== */
 .plans-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
-    align-items: center; /* Alinha verticalmente */
+    align-items: stretch; /* Garante que todos tenham a mesma altura */
+    margin-top: 2rem;
 }
 
 .plan-card {
@@ -537,33 +540,38 @@ p { margin-bottom: 1.5rem; font-weight: 300; }
     position: relative;
     display: flex;
     flex-direction: column;
+    justify-content: space-between; /* Empurra o botão para o final */
+    height: 100%;
 }
 
 .plan-card:hover {
     transform: translateY(-10px);
     background: var(--bg-surface-highlight);
+    border-color: var(--border-gold);
+}
+
+.plan-kicker {
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+    display: block;
 }
 
 .plan-name {
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    margin-bottom: 1rem;
-}
-
-.plan-price {
+    font-size: 2rem;
     font-family: 'Manrope', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 800;
     color: white;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
 }
 
 .plan-desc {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    color: var(--text-body);
     margin-bottom: 2rem;
-    min-height: 40px; /* Alinha os botões */
+    min-height: 80px; /* Altura mínima para alinhar os textos */
 }
 
 .plan-features {
@@ -572,29 +580,30 @@ p { margin-bottom: 1.5rem; font-weight: 300; }
     text-align: left;
     border-top: 1px solid var(--border-subtle);
     padding-top: 1.5rem;
+    flex-grow: 1; /* Faz a lista ocupar o espaço disponível */
 }
 
 .plan-features li {
     margin-bottom: 0.8rem;
     color: var(--text-body);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 10px;
 }
 
-/* --- ESTILO DO CARD DESTAQUE (Growth) --- */
+/* --- DESTAQUE (CARD DO MEIO) --- */
 .plan-card.featured {
     border: 1px solid var(--gold-primary);
-    background: linear-gradient(180deg, rgba(207, 164, 93, 0.05) 0%, var(--bg-surface) 100%);
-    box-shadow: 0 0 30px rgba(207, 164, 93, 0.1);
-    transform: scale(1.05); /* Fica um pouco maior que os outros */
+    background: linear-gradient(180deg, rgba(207, 164, 93, 0.08) 0%, var(--bg-surface) 100%);
+    box-shadow: 0 0 40px rgba(207, 164, 93, 0.15);
     z-index: 2;
+    transform: scale(1.05); /* Leve zoom para destaque */
 }
 
 .plan-card.featured:hover {
     transform: scale(1.08);
-    box-shadow: 0 0 50px rgba(207, 164, 93, 0.2);
+    box-shadow: 0 0 60px rgba(207, 164, 93, 0.25);
 }
 
 .popular-badge {
@@ -603,19 +612,21 @@ p { margin-bottom: 1.5rem; font-weight: 300; }
     left: 50%;
     transform: translateX(-50%);
     background: var(--gold-primary);
-    color: black;
-    padding: 5px 15px;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 700;
+    color: #000;
+    font-weight: 800;
+    font-size: 0.75rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
     text-transform: uppercase;
-    white-space: nowrap;
+    letter-spacing: 0.1em;
+    box-shadow: 0 4px 15px rgba(207, 164, 93, 0.4);
 }
 
-/* Mobile Ajuste */
-@media (max-width: 768px) {
+/* MOBILE FIX */
+@media (max-width: 1024px) {
     .plan-card.featured {
-        transform: scale(1); /* Remove o zoom no mobile para não quebrar a tela */
-        margin: 1rem 0;
+        transform: scale(1); /* Remove zoom no tablet/mobile */
+        margin: 2rem 0;
     }
 }
+
