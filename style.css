@@ -134,7 +134,7 @@ p { opacity: 0.9; font-weight: 300; }
 .comp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--border-subtle); padding-bottom: 1rem; color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; }
 .chart-bar-container { display: flex; justify-content: space-between; align-items: flex-end; height: 200px; padding-top: 20px; }
 .chart-col { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 15%; }
-.chart-col span { font-size: 0.8rem; color: var(--text-muted); }
+.chart-col span { font-size: 0.6rem; color: var(--text-muted); }
 .bar { width: 100%; background: #333; border-radius: 4px; position: relative; }
 .gold-bar { background: var(--gold-gradient); box-shadow: 0 0 20px rgba(207, 164, 93, 0.3); }
 .bar-tooltip { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: var(--gold-primary); color: black; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; animation: bounce 2s infinite; }
@@ -192,10 +192,149 @@ p { opacity: 0.9; font-weight: 300; }
 body.hovering .cursor-outline { width: 60px; height: 60px; background-color: rgba(207, 164, 93, 0.1); border-color: var(--gold-primary); }
 
 /* Cookies */
-.cookie-banner { position: fixed; bottom: -100px; left: 0; width: 100%; background: #111; border-top: 1px solid var(--border-gold); padding: 1.5rem 0; z-index: 9998; transition: bottom 0.5s ease; display: flex; justify-content: center; }
-.cookie-banner.show { bottom: 0; }
-.cookie-content { max-width: 1200px; width: 90%; display: flex; justify-content: space-between; align-items: center; gap: 2rem; }
-.cookie-content p { margin: 0; font-size: 0.85rem; color: var(--text-body); }
+/* ==========================================================================
+   COOKIES (CORRIGIDO)
+   ========================================================================== */
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(15, 15, 15, 0.98); /* Fundo quase sólido */
+    border-top: 1px solid var(--border-gold);
+    padding: 1.5rem;
+    z-index: 99999; /* ACIMA DE TUDO (Mais que o WhatsApp) */
+    backdrop-filter: blur(10px);
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.8);
+    
+    /* Animação segura */
+    transform: translateY(100%); /* Começa escondido para baixo */
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    display: flex;
+    justify-content: center;
+}
+
+.cookie-banner.show {
+    transform: translateY(0); /* Sobe */
+}
+
+.cookie-content {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap; /* Permite quebrar linha no mobile */
+}
+
+.cookie-content p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-body);
+    flex: 1; /* Ocupa o espaço disponível */
+    min-width: 250px; /* Evita ficar muito espremido */
+}
+
+/* ==========================================================================
+   14. MEDIA QUERIES (MOBILE OTIMIZADO)
+   ========================================================================== */
+@media (max-width: 768px) {
+    
+    /* --- NAVEGAÇÃO --- */
+    .mobile-toggle { 
+        display: block; 
+        z-index: 1100; 
+        position: relative; 
+        color: white; /* Garante visibilidade */
+    }
+    
+    .nav-menu {
+        position: fixed; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
+        height: 100vh;
+        background: #050505; /* Fundo Sólido Preto */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        
+        /* Animação */
+        transform: translateY(-100%);
+        transition: transform 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+        z-index: 1050;
+        opacity: 1; /* Mantém opacidade 1 para não piscar */
+        visibility: hidden;
+    }
+    
+    .nav-menu.active { 
+        transform: translateY(0); 
+        visibility: visible;
+    }
+    
+    .nav-link { font-size: 1.8rem; font-weight: 700; }
+
+    /* --- HERO --- */
+    .hero-content h1 { font-size: 2.2rem; line-height: 1.2; }
+    .hero-buttons { flex-direction: column; width: 100%; }
+    .btn { width: 100%; }
+
+    /* --- TIMELINE (LINHA DO TEMPO) --- */
+    /* No mobile, a linha vai para a esquerda e tudo alinha à direita dela */
+    .timeline-line { left: 20px; transform: none; } /* Linha encosta na esq */
+    .timeline-progress { left: 0; transform: none; } /* Progresso acompanha */
+    .timeline-drop { left: 0; transform: none; }     /* Gota acompanha */
+    
+    /* Zera a ponta de luz para não vazar */
+    .timeline-progress::after { left: 0; transform: translateX(-50%); } 
+
+    .timeline-item {
+        width: 100%;
+        padding-left: 60px; /* Espaço para a linha */
+        padding-right: 0;
+        text-align: left;
+        margin-bottom: 2rem;
+    }
+
+    /* Força itens da esquerda e direita a ficarem iguais */
+    .timeline-item.left, .timeline-item.right { left: 0; text-align: left; }
+    
+    /* Bolinha sempre na esquerda */
+    .timeline-item.left::before, .timeline-item.right::before {
+        left: 11px; /* Centraliza na linha de 4px (20px - metade da bolinha) */
+        right: auto;
+    }
+
+    /* Número do passo */
+    .timeline-item.left .step-number, .timeline-item.right .step-number {
+        right: auto;
+        left: 60px; /* Alinha com o texto */
+    }
+
+    /* --- OUTROS --- */
+    .contact-wrapper, .qualification-grid, .plans-grid, .portfolio-grid { 
+        grid-template-columns: 1fr; 
+        gap: 3rem; 
+    }
+    
+    .chart-bar-container { height: 150px; }
+    
+    .footer .container { flex-direction: column; text-align: center; }
+    .footer__legal { align-items: center; }
+    .footer__links { justify-content: center; }
+    
+    /* Ajustes Cookie Banner Mobile */
+    .cookie-content { flex-direction: column; text-align: center; gap: 1rem; }
+    .cookie-actions { width: 100%; }
+    .cookie-actions .btn { width: 100%; padding: 0.8rem; } /* Botão grande para dedo */
+
+    /* Desativa Cursor Customizado (Touch não tem mouse) */
+    body { cursor: auto; }
+    .cursor-dot, .cursor-outline { display: none; }
+}
 
 /* Preloader */
 #preloader { position: fixed; inset: 0; background-color: #000; z-index: 99999; display: flex; align-items: center; justify-content: center; transition: opacity 0.8s ease, visibility 0.8s ease; }
