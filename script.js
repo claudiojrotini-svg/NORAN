@@ -77,22 +77,29 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Cookies
+    // Cookies (Corrigido)
     const initCookies = () => {
         const banner = document.getElementById('cookie-banner');
         const btn = document.getElementById('accept-cookies');
         
-        if (banner && !localStorage.getItem('noran_cookies')) {
+        // Se o elemento não existir no HTML, para aqui.
+        if (!banner || !btn) return;
+
+        // Verifica se JÁ aceitou (se tiver 'true' no navegador, não mostra)
+        if (!localStorage.getItem('noran_cookies')) {
+            // Espera 2 segundos e mostra
             setTimeout(() => {
                 banner.classList.add('show');
-            }, 2500);
+            }, 2000);
         }
 
-        if(btn){
-            btn.addEventListener('click', () => {
-                localStorage.setItem('noran_cookies', 'true');
-                banner.classList.remove('show');
-            });
-        }
+        // Ao clicar no botão
+        btn.addEventListener('click', () => {
+            // Grava no navegador que aceitou
+            localStorage.setItem('noran_cookies', 'true');
+            // Remove a classe para esconder (desliza para baixo)
+            banner.classList.remove('show');
+        });
     };
 
     // =================================================================
